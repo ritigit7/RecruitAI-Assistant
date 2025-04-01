@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Parser & Meeting Scheduler</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4bb543;
+            --warning-color: #ffcc00;
+            --danger-color: #ff3333;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 5px 0;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .page-title {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-right: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background-color: #3a9e35;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+
+        .btn-danger:hover {
+            background-color: #e60000;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            border: 2px dashed #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 20px;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-color);
+        }
+
+        .file-upload i {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .file-upload p {
+            margin-bottom: 10px;
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .tab-container {
+            margin-bottom: 30px;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .tab.active {
+            border-bottom-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .resume-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+        }
+
+        .json-viewer {
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .meeting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: var(--transition);
+        }
+
+        .meeting-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .meeting-info {
+            flex: 1;
+        }
+
+        .meeting-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .meeting-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .meeting-details span {
+            display: flex;
+            align-items: center;
+        }
+
+        .meeting-details i {
+            margin-right: 5px;
+        }
+
+        .meeting-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .calendar-header {
+            font-weight: 600;
+            text-align: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+        }
+
+        .calendar-day {
+            min-height: 80px;
+            padding: 5px;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+            background-color: white;
+        }
+
+        .calendar-day.empty {
+            background-color: transparent;
+            border: none;
+        }
+
+        .day-number {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .calendar-event {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3px 5px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 3px;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .calendar-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .month-year {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .timeline {
+            margin-top: 30px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 15px;
+            width: 1px;
+            height: calc(100% - 15px);
+            background-color: #ddd;
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        .timeline-date {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .timeline-desc {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .alert-success {
+            background-color: rgba(75, 181, 67, 0.2);
+            color: var(--success-color);
+        }
+
+        .alert-warning {
+            background-color: rgba(255, 204, 0, 0.2);
+            color: var(--warning-color);
+        }
+
+        .alert-danger {
+            background-color: rgba(255, 51, 51, 0.2);
+            color: var(--danger-color);
+        }
+
+        .alert-info {
+            background-color: rgba(76, 201, 240, 0.2);
+            color: var(--accent-color);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background-color: white;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 30px;
+                transition: var(--transition);
+                z-index: 99;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links li {
+                margin: 15px 0;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .calendar {
+                grid-template-columns: repeat(1, 1fr);
+            }
+
+            .calendar-day {
+                min-height: auto;
+            }
+
+            .meeting-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .meeting-actions {
+                margin-top: 10px;
+                align-self: flex-end;
+            }
+        }
+
+        /* PDF viewer styles */
+        .pdf-viewer-container {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .pdf-viewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Resume & Meeting Assistant</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#" class="active" data-page="resume"><i class="fas fa-file-alt"></i> Resume Parser</a></li>
+                    <li><a href="#" data-page="meeting"><i class="fas fa-calendar-alt"></i> Meeting Scheduler</a></li>
+                </ul>
+                <div class="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Resume Parser Section -->
+            <section id="resume-page" class="page-content active">
+                <h1 class="page-title"><i class="fas fa-file-alt"></i> Resume Parser</h1>
+                
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-upload"></i> Upload Resume</h2>
+                    <div class="file-upload" id="resume-upload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop your resume here or click to browse</p>
+                        <p class="text-muted">Supports PDF and DOCX files</p>
+                        <input type="file" id="resume-file" accept=".pdf,.docx">
+                        <button class="btn btn-outline">Select File</button>
+                    </div>
+                    <div id="file-info" style="display: none;">
+                        <p><strong>Selected file:</strong> <span id="file-name"></span></p>
+                    </div>
+                    <div id="upload-alert"></div>
+                    <button id="parse-btn" class="btn" disabled><i class="fas fa-magic"></i> Parse Resume</button>
+                </div>
+
+                <div class="card" id="resume-results" style="display: none;">
+                    <h2 class="card-title"><i class="fas fa-poll"></i> Parsed Results</h2>
+                    <div class="tab-container">
+                        <div class="tabs" id="resume-tabs"></div>
+                        <div class="tab-contents" id="resume-tab-contents"></div>
+                    </div>
+                    <button id="download-pdf-btn" class="btn btn-success"><i class="fas fa-file-pdf"></i> Download PDF</button>
+                </div>
+
+                <div class="modal" id="pdf-modal">
+                    <div class="modal-content">
+                        <span class="modal-close">&times;</span>
+                        <h2 class="modal-title">Generated Resume PDF</h2>
+                        <div class="pdf-viewer-container">
+                            <iframe class="pdf-viewer" id="pdf-viewer" src="" frameborder="0"></iframe>
+                        </div>
+                        <div class="text-center">
+                            <a href="#" class="btn" id="download-pdf-link"><i class="fas fa-download"></i> Download PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Meeting Scheduler Section -->
+            <section id="meeting-page" class="page-content">
+                <h1 class="page-title"><i class="fas fa-calendar-alt"></i> Meeting Scheduler</h1>
+                
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-plus-circle"></i> Schedule New Meeting</h2>
+                    <div class="tab-container">
+                        <div class="tabs">
+                            <div class="tab active" data-tab="auto">Auto Extract</div>
+                            <div class="tab" data-tab="manual">Manual Entry</div>
+                        </div>
+                        <div class="tab-contents">
+                            <div class="tab-content active" id="auto-tab">
+                                <div class="form-group">
+                                    <label class="form-label">Describe your meeting:</label>
+                                    <textarea class="form-control" id="meeting-description" placeholder="E.g., 'Schedule a team meeting tomorrow at 2pm for 1 hour with John and Sarah to discuss project updates'"></textarea>
+                                </div>
+                                <button id="extract-meeting-btn" class="btn"><i class="fas fa-search"></i> Extract Meeting Details</button>
+                                <div id="extraction-result"></div>
+                            </div>
+                            <div class="tab-content" id="manual-tab">
+                                <div class="form-group">
+                                    <label class="form-label">Meeting Title</label>
+                                    <input type="text" class="form-control" id="meeting-title" placeholder="Team Standup">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Date</label>
+                                    <input type="date" class="form-control" id="meeting-date">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Time</label>
+                                    <input type="time" class="form-control" id="meeting-time">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Duration (hours)</label>
+                                    <input type="number" class="form-control" id="meeting-duration" min="0.5" max="8" step="0.5" value="1">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Participants (comma separated)</label>
+                                    <input type="text" class="form-control" id="meeting-participants" placeholder="john@example.com, sarah@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-control" id="meeting-desc" placeholder="Meeting agenda or notes"></textarea>
+                                </div>
+                                <button id="add-meeting-btn" class="btn"><i class="fas fa-calendar-plus"></i> Add Meeting</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-calendar-week"></i> Calendar View</h2>
+                    <div class="calendar-controls">
+                        <div>
+                            <button id="prev-month" class="btn btn-outline"><i class="fas fa-chevron-left"></i></button>
+                            <button id="next-month" class="btn btn-outline"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <div class="month-year" id="current-month-year">March 2023</div>
+                        <div>
+                            <button id="today-btn" class="btn btn-outline">Today</button>
+                        </div>
+                    </div>
+                    <div class="calendar" id="calendar"></div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-list"></i> Meeting List</h2>
+                    <div id="meeting-list"></div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-chart-line"></i> Timeline View</h2>
+                    <div class="timeline" id="timeline"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // DOM Elements
+        const resumePage = document.getElementById('resume-page');
+        const meetingPage = document.getElementById('meeting-page');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-links');
+        const fileUpload = document.getElementById('resume-upload');
+        const resumeFileInput = document.getElementById('resume-file');
+        const parseBtn = document.getElementById('parse-btn');
+        const fileName = document.getElementById('file-name');
+        const fileInfo = document.getElementById('file-info');
+        const uploadAlert = document.getElementById('upload-alert');
+        const resumeResults = document.getElementById('resume-results');
+        const resumeTabs = document.getElementById('resume-tabs');
+        const resumeTabContents = document.getElementById('resume-tab-contents');
+        const downloadPdfBtn = document.getElementById('download-pdf-btn');
+        const pdfModal = document.getElementById('pdf-modal');
+        const pdfViewer = document.getElementById('pdf-viewer');
+        const downloadPdfLink = document.getElementById('download-pdf-link');
+        const modalClose = document.querySelector('.modal-close');
+        
+        // Meeting elements
+        const meetingDescription = document.getElementById('meeting-description');
+        const extractMeetingBtn = document.getElementById('extract-meeting-btn');
+        const extractionResult = document.getElementById('extraction-result');
+        const meetingTitle = document.getElementById('meeting-title');
+        const meetingDate = document.getElementById('meeting-date');
+        const meetingTime = document.getElementById('meeting-time');
+        const meetingDuration = document.getElementById('meeting-duration');
+        const meetingParticipants = document.getElementById('meeting-participants');
+        const meetingDesc = document.getElementById('meeting-desc');
+        const addMeetingBtn = document.getElementById('add-meeting-btn');
+        const meetingList = document.getElementById('meeting-list');
+        const timeline = document.getElementById('timeline');
+        const calendar = document.getElementById('calendar');
+        const currentMonthYear = document.getElementById('current-month-year');
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+        const todayBtn = document.getElementById('today-btn');
+        const meetingTabs = document.querySelectorAll('[data-tab]');
+        const meetingTabContents = document.querySelectorAll('.tab-content');
+
+        // App state
+        let currentPage = 'resume';
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let meetings = [];
+        let parsedResumeData = null;
+        let selectedFile = null;
+
+        // Initialize the app
+        function init() {
+            setupEventListeners();
+            loadMeetings();
+            renderCalendar();
+            renderMeetingList();
+            renderTimeline();
+            
+            // Set default date for manual meeting entry
+            const today = new Date().toISOString().split('T')[0];
+            meetingDate.value = today;
+            
+            // Set default time to next hour
+            const nextHour = new Date().getHours() + 1;
+            meetingTime.value = `${nextHour.toString().padStart(2, '0')}:00`;
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    currentPage = link.dataset.page;
+                    updateActivePage();
+                });
+            });
+
+            hamburger.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+
+            // Resume parser
+            fileUpload.addEventListener('click', () => resumeFileInput.click());
+            resumeFileInput.addEventListener('change', handleFileSelect);
+            parseBtn.addEventListener('click', parseResume);
+            downloadPdfBtn.addEventListener('click', showPdfModal);
+            modalClose.addEventListener('click', () => pdfModal.style.display = 'none');
+            pdfModal.addEventListener('click', (e) => {
+                if (e.target === pdfModal) {
+                    pdfModal.style.display = 'none';
+                }
+            });
+
+            // Meeting scheduler
+            extractMeetingBtn.addEventListener('click', extractMeetingInfo);
+            addMeetingBtn.addEventListener('click', addManualMeeting);
+            prevMonthBtn.addEventListener('click', () => {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                renderCalendar();
+            });
+            nextMonthBtn.addEventListener('click', () => {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                renderCalendar();
+            });
+            todayBtn.addEventListener('click', () => {
+                const now = new Date();
+                currentMonth = now.getMonth();
+                currentYear = now.getFullYear();
+                renderCalendar();
+            });
+
+            // Tab switching
+            meetingTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    meetingTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    meetingTabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+                });
+            });
+        }
+
+        // Update active page
+        function updateActivePage() {
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.querySelector(`[data-page="${currentPage}"]`).classList.add('active');
+            document.getElementById(`${currentPage}-page`).classList.add('active');
+            
+            // Close mobile menu if open
+            navMenu.classList.remove('active');
+        }
+
+        // Handle file selection
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            selectedFile = file;
+            fileName.textContent = file.name;
+            fileInfo.style.display = 'block';
+            parseBtn.disabled = false;
+            
+            // Show success message
+            uploadAlert.innerHTML = `
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    File selected successfully! Click "Parse Resume" to analyze.
+                </div>
+            `;
+        }
+
+        // Parse resume (mock implementation)
+        async function parseResume() {
+            if (!selectedFile) return;
+
+            parseBtn.innerHTML = '<i class="fas fa-spinner spinner"></i> Parsing...';
+            parseBtn.disabled = true;
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                
+                const response = await fetch('http://localhost:5000/parse-resume', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(await response.text());
+                }
+                
+                parsedResumeData = await response.json();
+                displayResumeResults(parsedResumeData);
+                
+                uploadAlert.innerHTML = `
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        Resume parsed successfully! View the results below.
+                    </div>
+                `;
+                
+                resumeResults.style.display = 'block';
+            } catch (error) {
+                uploadAlert.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-times-circle"></i>
+                        Error parsing resume: ${error.message}
+                    </div>
+                `;
+            } finally {
+                parseBtn.innerHTML = '<i class="fas fa-magic"></i> Parse Resume';
+                parseBtn.disabled = false;
+            }
+        }
+
+        // Display resume results
+        function displayResumeResults(data) {
+            // Clear previous tabs
+            resumeTabs.innerHTML = '';
+            resumeTabContents.innerHTML = '';
+            
+            // Create tabs for each section
+            Object.keys(data).forEach((section, index) => {
+                // Create tab
+                const tab = document.createElement('div');
+                tab.className = `tab ${index === 0 ? 'active' : ''}`;
+                tab.textContent = section;
+                tab.dataset.section = section.toLowerCase().replace(/\s+/g, '-');
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('#resume-tabs .tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    document.querySelectorAll('#resume-tab-contents .tab-content').forEach(c => c.classList.remove('active'));
+                    document.getElementById(`tab-${tab.dataset.section}`).classList.add('active');
+                });
+                resumeTabs.appendChild(tab);
+                
+                // Create tab content
+                const tabContent = document.createElement('div');
+                tabContent.className = `tab-content ${index === 0 ? 'active' : ''}`;
+                tabContent.id = `tab-${tab.dataset.section}`;
+                
+                const jsonViewer = document.createElement('div');
+                jsonViewer.className = 'json-viewer';
+                jsonViewer.textContent = JSON.stringify(data[section], null, 2);
+                
+                tabContent.appendChild(jsonViewer);
+                resumeTabContents.appendChild(tabContent);
+            });
+        }
+
+        // Show PDF modal (mock implementation)
+        async function showPdfModal() {
+            if (!parsedResumeData) return;
+            
+            try {
+                const response = await fetch('http://localhost:5000/generate-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ resume_data: parsedResumeData })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(await response.text());
+                }
+                
+                const blob = await response.blob();
+                const pdfUrl = URL.createObjectURL(blob);
+                
+                pdfViewer.src = pdfUrl;
+                downloadPdfLink.href = pdfUrl;
+                downloadPdfLink.download = 'resume.pdf';
+                pdfModal.style.display = 'flex';
+            } catch (error) {
+                alert(`Error generating PDF: ${error.message}`);
+            }
+        }
+
+        // Load meetings from localStorage
+        function loadMeetings() {
+            // In a real app, this would fetch from your backend
+            meetings = getMockMeetings();
+        }
+
+        // Extract meeting info from text (mock implementation)
+        async function extractMeetingInfo() {
+            const text = meetingDescription.value.trim();
+            if (!text) {
+                extractionResult.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Please enter a meeting description.
+                    </div>
+                `;
+                return;
+            }
+
+            extractMeetingBtn.innerHTML = '<i class="fas fa-spinner spinner"></i> Extracting...';
+            extractMeetingBtn.disabled = true;
+            
+            try {
+                const response = await fetch('http://localhost:5000/extract-meeting', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(await response.text());
+                }
+                
+                const meetingData = await response.json();
+                
+                extractionResult.innerHTML = `
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        Meeting details extracted successfully!
+                    </div>
+                    <div class="card" style="margin-top: 20px;">
+                        <h3 class="card-title"><i class="fas fa-info-circle"></i> Extracted Details</h3>
+                        <div class="json-viewer">
+                            ${JSON.stringify(meetingData, null, 2)}
+                        </div>
+                        <button id="add-extracted-meeting" class="btn" style="margin-top: 15px;">
+                            <i class="fas fa-calendar-plus"></i> Add to Calendar
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('add-extracted-meeting').addEventListener('click', () => {
+                    addMeetingFromExtractedData(meetingData);
+                });
+            } catch (error) {
+                extractionResult.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-times-circle"></i>
+                        Error extracting meeting details: ${error.message}
+                    </div>
+                `;
+            } finally {
+                extractMeetingBtn.innerHTML = '<i class="fas fa-search"></i> Extract Meeting Details';
+                extractMeetingBtn.disabled = false;
+            }
+        }
+
+        // Add meeting from extracted data
+        function addMeetingFromExtractedData(data) {
+            const newMeeting = {
+                id: Date.now(),
+                title: data.title,
+                start: data.datetime,
+                end: new Date(new Date(data.datetime).getTime() + data.duration_of_meeting * 60 * 60 * 1000).toISOString(),
+                participants: data.participants,
+                description: data.meeting_description,
+                status: 'upcoming'
+            };
+            
+            meetings.push(newMeeting);
+            saveMeetings();
+            renderCalendar();
+            renderMeetingList();
+            renderTimeline();
+            
+            extractionResult.innerHTML += `
+                <div class="alert alert-success" style="margin-top: 15px;">
+                    <i class="fas fa-check-circle"></i>
+                    Meeting added to your calendar!
+                </div>
+            `;
+        }
+
+        // Add manual meeting
+        function addManualMeeting() {
+            const title = meetingTitle.value.trim();
+            const date = meetingDate.value;
+            const time = meetingTime.value;
+            const duration = parseFloat(meetingDuration.value);
+            const participants = meetingParticipants.value.split(',').map(p => p.trim()).filter(p => p);
+            const desc = meetingDesc.value.trim();
+            
+            if (!title || !date || !time) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const startDateTime = new Date(`${date}T${time}`);
+            const endDateTime = new Date(startDateTime.getTime() + duration * 60 * 60 * 1000);
+            
+            const newMeeting = {
+                id: Date.now(),
+                title: title,
+                start: startDateTime.toISOString(),
+                end: endDateTime.toISOString(),
+                participants: participants,
+                description: desc,
+                status: 'upcoming'
+            };
+            
+            meetings.push(newMeeting);
+            saveMeetings();
+            renderCalendar();
+            renderMeetingList();
+            renderTimeline();
+            
+            // Reset form
+            meetingTitle.value = '';
+            meetingDate.value = date; // Keep same date
+            meetingTime.value = time; // Keep same time
+            meetingParticipants.value = '';
+            meetingDesc.value = '';
+            
+            // Show success message
+            const manualTab = document.getElementById('manual-tab');
+            const successMsg = document.createElement('div');
+            successMsg.className = 'alert alert-success';
+            successMsg.innerHTML = '<i class="fas fa-check-circle"></i> Meeting added successfully!';
+            manualTab.appendChild(successMsg);
+            
+            setTimeout(() => {
+                successMsg.remove();
+            }, 3000);
+        }
+
+        // Save meetings to localStorage
+        function saveMeetings() {
+            // In a real app, this would save to your backend
+            localStorage.setItem('meetings', JSON.stringify(meetings));
+        }
+
+        // Render calendar
+        function renderCalendar() {
+            currentMonthYear.textContent = `${new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} ${currentYear}`;
+            
+            // Get first day of month and total days
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            // Adjust first day (Monday = 0)
+            const adjustedFirstDay = (firstDay + 6) % 7;
+            
+            calendar.innerHTML = '';
+            
+            // Add day headers
+            ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'calendar-header';
+                dayHeader.textContent = day;
+                calendar.appendChild(dayHeader);
+            });
+            
+            // Add empty cells for days before first day of month
+            for (let i = 0; i < adjustedFirstDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day empty';
+                calendar.appendChild(emptyDay);
+            }
+            
+            // Add days of month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                
+                const dayNumber = document.createElement('div');
+                dayNumber.className = 'day-number';
+                dayNumber.textContent = day;
+                dayCell.appendChild(dayNumber);
+                
+                // Add meetings for this day
+                const dateStr = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                const dayMeetings = meetings.filter(meeting => meeting.start.includes(dateStr));
+                
+                dayMeetings.forEach(meeting => {
+                    const meetingEvent = document.createElement('div');
+                    meetingEvent.className = 'calendar-event';
+                    meetingEvent.textContent = meeting.title;
+                    meetingEvent.title = `${meeting.title}\n${new Date(meeting.start).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                    dayCell.appendChild(meetingEvent);
+                });
+                
+                // Highlight today
+                const today = new Date();
+                if (day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                    dayCell.style.backgroundColor = '#f0f7ff';
+                }
+                
+                calendar.appendChild(dayCell);
+            }
+        }
+
+        // Render meeting list
+        function renderMeetingList() {
+            if (meetings.length === 0) {
+                meetingList.innerHTML = '<p>No meetings scheduled yet.</p>';
+                return;
+            }
+            
+            // Sort meetings by date
+            const sortedMeetings = [...meetings].sort((a, b) => new Date(a.start) - new Date(b.start));
+            
+            meetingList.innerHTML = '';
+            
+            sortedMeetings.forEach(meeting => {
+                const startDate = new Date(meeting.start);
+                const endDate = new Date(meeting.end);
+                
+                const meetingItem = document.createElement('div');
+                meetingItem.className = 'meeting-item';
+                
+                const meetingInfo = document.createElement('div');
+                meetingInfo.className = 'meeting-info';
+                
+                const meetingTitle = document.createElement('div');
+                meetingTitle.className = 'meeting-title';
+                meetingTitle.textContent = meeting.title;
+                
+                const meetingDetails = document.createElement('div');
+                meetingDetails.className = 'meeting-details';
+                
+                const dateDetail = document.createElement('span');
+                dateDetail.innerHTML = `<i class="far fa-calendar"></i> ${startDate.toLocaleDateString()}`;
+                
+                const timeDetail = document.createElement('span');
+                timeDetail.innerHTML = `<i class="far fa-clock"></i> ${startDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${endDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                
+                const participantsDetail = document.createElement('span');
+                participantsDetail.innerHTML = `<i class="fas fa-users"></i> ${meeting.participants.length > 0 ? meeting.participants.join(', ') : 'No participants'}`;
+                
+                meetingDetails.appendChild(dateDetail);
+                meetingDetails.appendChild(timeDetail);
+                meetingDetails.appendChild(participantsDetail);
+                
+                meetingInfo.appendChild(meetingTitle);
+                meetingInfo.appendChild(meetingDetails);
+                
+                const meetingActions = document.createElement('div');
+                meetingActions.className = 'meeting-actions';
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn btn-danger';
+                deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                deleteBtn.title = 'Delete meeting';
+                deleteBtn.addEventListener('click', () => deleteMeeting(meeting.id));
+                
+                meetingActions.appendChild(deleteBtn);
+                
+                meetingItem.appendChild(meetingInfo);
+                meetingItem.appendChild(meetingActions);
+                
+                meetingList.appendChild(meetingItem);
+            });
+        }
+
+        // Render timeline
+        function renderTimeline() {
+            if (meetings.length === 0) {
+                timeline.innerHTML = '<p>No meetings scheduled yet.</p>';
+                return;
+            }
+            
+            // Sort meetings by date
+            const sortedMeetings = [...meetings].sort((a, b) => new Date(a.start) - new Date(b.start));
+            
+            timeline.innerHTML = '';
+            
+            sortedMeetings.forEach(meeting => {
+                const startDate = new Date(meeting.start);
+                const endDate = new Date(meeting.end);
+                
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'timeline-item';
+                
+                const timelineDate = document.createElement('div');
+                timelineDate.className = 'timeline-date';
+                timelineDate.textContent = startDate.toLocaleDateString() + ' • ' + 
+                                          startDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + 
+                                          ' - ' + endDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                const timelineTitle = document.createElement('div');
+                timelineTitle.className = 'timeline-title';
+                timelineTitle.textContent = meeting.title;
+                
+                const timelineDesc = document.createElement('div');
+                timelineDesc.className = 'timeline-desc';
+                timelineDesc.textContent = meeting.description || 'No description provided';
+                
+                timelineItem.appendChild(timelineDate);
+                timelineItem.appendChild(timelineTitle);
+                timelineItem.appendChild(timelineDesc);
+                
+                timeline.appendChild(timelineItem);
+            });
+        }
+
+        // Delete meeting
+        function deleteMeeting(id) {
+            if (confirm('Are you sure you want to delete this meeting?')) {
+                meetings = meetings.filter(meeting => meeting.id !== id);
+                saveMeetings();
+                renderCalendar();
+                renderMeetingList();
+                renderTimeline();
+            }
+        }
+
+        // Mock data functions (replace with actual API calls in production)
+        function getMockResumeData() {
+            return {
+                "Application Form": {
+                    "date": "2023-05-15",
+                    "site": "Company Website",
+                    "post_applied_for": "Senior Software Engineer"
+                },
+                "Name Details": {
+                    "first_name": "John",
+                    "middle_name": "Michael",
+                    "last_name": "Doe"
+                },
+                "Personal Information": {
+                    "name": {
+                        "first_name": "John",
+                        "middle_name": "Michael",
+                        "last_name": "Doe"
+                    },
+                    "date_of_birth": "1990-05-15",
+                    "age": 33,
+                    "gender": "Male",
+                    "blood_group": "O+",
+                    "marital_status": "Single",
+                    "religion": "Christian",
+                    "caste": "General",
+                    "contact_number": "+1 (555) 123-4567",
+                    "personal_email": "john.doe@example.com",
+                    "height": 175.5,
+                    "weight": 70.2,
+                    "aadhar_no": "1234 5678 9012",
+                    "pan_no": "ABCDE1234F",
+                    "residence_status": "Owned",
+                    "present_address": "123 Main St, Anytown, USA",
+                    "permanent_address": "123 Main St, Anytown, USA",
+                    "residence_duration": {
+                        "years": 5,
+                        "months": 2
+                    },
+                    "distance_from_office_km": 10.5,
+                    "own_vehicle": {
+                        "has_vehicle": true,
+                        "vehicle_type": "Sedan"
+                    }
+                },
+                "Education Details": [
+                    {
+                        "qualification": "Master of Computer Science",
+                        "college_school": "Tech University",
+                        "board_university": "State Board",
+                        "percentage_grade": "A+",
+                        "year_of_passing": "2015"
+                    },
+                    {
+                        "qualification": "Bachelor of Science in Computer Science",
+                        "college_school": "State College",
+                        "board_university": "State Board",
+                        "percentage_grade": "88%",
+                        "year_of_passing": "2013"
+                    }
+                ],
+                "Work Experience": [
+                    {
+                        "employer_name": "Tech Solutions Inc.",
+                        "location": "San Francisco, CA",
+                        "designation": "Senior Software Engineer",
+                        "start_date": "2018-06-01",
+                        "end_date": "2023-05-01",
+                        "salary": "$120,000",
+                        "reason_for_leaving": "Career growth"
+                    },
+                    {
+                        "employer_name": "Web Developers LLC",
+                        "location": "New York, NY",
+                        "designation": "Software Engineer",
+                        "start_date": "2015-07-01",
+                        "end_date": "2018-05-31",
+                        "salary": "$85,000",
+                        "reason_for_leaving": "Better opportunity"
+                    }
+                ],
+                "Skills": [
+                    "JavaScript",
+                    "Python",
+                    "React",
+                    "Node.js",
+                    "SQL",
+                    "AWS",
+                    "Docker",
+                    "Kubernetes"
+                ],
+                "Projects": [
+                    {
+                        "name": "E-commerce Platform",
+                        "description": "Led development of a full-stack e-commerce solution with React and Node.js",
+                        "technologies": ["React", "Node.js", "MongoDB", "AWS"]
+                    },
+                    {
+                        "name": "AI Chatbot",
+                        "description": "Developed a customer service chatbot using Python and NLP",
+                        "technologies": ["Python", "NLTK", "TensorFlow"]
+                    }
+                ]
+            };
+        }
+
+        function getMockMeetingData(text) {
+            // This is a simplified mock - in a real app, you'd call your AI API
+            return {
+                "meeting_description": text.includes("project") ? "Project status update meeting" : "Team sync meeting",
+                "is_calendar_event": true,
+                "confidence_score": 0.85,
+                "title": text.includes("project") ? "Project Update" : "Team Sync",
+                "datetime": new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+                "date": new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString(),
+                "time": "14:00:00",
+                "duration_of_meeting": 1.0,
+                "participants": ["john@example.com", "sarah@example.com"],
+                "confirmation_message": "Meeting scheduled successfully for tomorrow at 2 PM.",
+                "calendar_link": null
+            };
+        }
+
+        function getMockMeetings() {
+            return [
+                {
+                    "id": 1,
+                    "title": "Project Kickoff",
+                    "start": new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+                    "end": new Date(Date.now() + 2 * 24 * 60 * 60 * 1000 + 60 * 60 * 1000).toISOString(),
+                    "participants": ["john@example.com", "sarah@example.com", "mike@example.com"],
+                    "description": "Initial meeting for the new client project",
+                    "status": "upcoming"
+                },
+                {
+                    "id": 2,
+                    "title": "Sprint Planning",
+                    "start": new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+                    "end": new Date(Date.now() + 5 * 24 * 60 * 60 * 1000 + 90 * 60 * 1000).toISOString(),
+                    "participants": ["dev-team@example.com"],
+                    "description": "Planning for the next sprint",
+                    "status": "upcoming"
+                },
+                {
+                    "id": 3,
+                    "title": "Client Demo",
+                    "start": new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+                    "end": new Date(Date.now() - 3 * 24 * 60 * 60 * 1000 + 45 * 60 * 1000).toISOString(),
+                    "participants": ["client@example.com", "pm@example.com"],
+                    "description": "Demo of the latest features",
+                    "status": "past"
+                }
+            ];
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>

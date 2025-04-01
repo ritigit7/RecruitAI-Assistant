@@ -1,0 +1,52 @@
+2025-03-28 14:09:27,958 - ollama - INFO - Initializing Ollama client with base URL: http://localhost:11434/v1
+2025-03-28 14:09:27,958 - ollama - INFO - Using model: llama3.2
+2025-03-28 14:09:27,958 - ollama - INFO - Setting up system message for resume analysis
+2025-03-28 14:09:38,946 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-28 14:09:38,950 - ollama - INFO - Initial Ollama connection successful
+2025-03-28 14:09:38,950 - resume - INFO - Defining Pydantic models for resume parsing
+2025-03-28 14:09:38,962 - meeting - INFO - Defining Pydantic models for meeting extraction
+2025-03-28 14:09:38,964 - resume - INFO - Setting up similarity search prompts for resume sections
+2025-03-28 14:09:39,482 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-28 14:09:39,482 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-28 14:09:39,515 - werkzeug - INFO -  * Restarting with watchdog (inotify)
+2025-03-28 14:09:52,605 - ollama - INFO - Initializing Ollama client with base URL: http://localhost:11434/v1
+2025-03-28 14:09:52,605 - ollama - INFO - Using model: llama3.2
+2025-03-28 14:09:52,605 - ollama - INFO - Setting up system message for resume analysis
+2025-03-28 14:09:52,715 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-28 14:09:52,718 - ollama - INFO - Initial Ollama connection successful
+2025-03-28 14:09:52,718 - resume - INFO - Defining Pydantic models for resume parsing
+2025-03-28 14:09:52,732 - meeting - INFO - Defining Pydantic models for meeting extraction
+2025-03-28 14:09:52,734 - resume - INFO - Setting up similarity search prompts for resume sections
+2025-03-28 14:09:52,808 - werkzeug - WARNING -  * Debugger is active!
+2025-03-28 14:09:52,809 - werkzeug - INFO -  * Debugger PIN: 239-970-622
+2025-03-28 14:10:15,746 - werkzeug - INFO - 127.0.0.1 - - [28/Mar/2025 14:10:15] "OPTIONS /extract-meeting HTTP/1.1" 200 -
+2025-03-28 14:10:15,748 - meeting - INFO - Starting meeting extraction process
+2025-03-28 14:10:15,748 - meeting - INFO - Calling Ollama model for meeting extraction
+2025-03-28 14:10:32,220 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-28 14:10:32,229 - meeting - INFO - LLM extraction successful - Title: 'team meeting', Date: 'tomorrow', Time: '02:00:00'
+2025-03-28 14:10:32,229 - meeting - INFO - Meeting extraction completed successfully
+2025-03-28 14:10:32,230 - werkzeug - INFO - 127.0.0.1 - - [28/Mar/2025 14:10:32] "POST /extract-meeting HTTP/1.1" 200 -
+2025-03-28 14:11:16,777 - werkzeug - INFO - 127.0.0.1 - - [28/Mar/2025 14:11:16] "OPTIONS /extract-meeting HTTP/1.1" 200 -
+2025-03-28 14:11:16,780 - meeting - INFO - Starting meeting extraction process
+2025-03-28 14:11:16,780 - meeting - INFO - Calling Ollama model for meeting extraction
+2025-03-28 14:11:26,183 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-28 14:11:26,184 - meeting - INFO - LLM extraction successful - Title: 'Team Meeting', Date: 'Mon, 2025-03-30', Time: '14:00:00'
+2025-03-28 14:11:26,184 - meeting - WARNING - No valid meeting detected or confidence too low
+2025-03-28 14:11:26,184 - werkzeug - INFO - 127.0.0.1 - - [28/Mar/2025 14:11:26] "[31m[1mPOST /extract-meeting HTTP/1.1[0m" 400 -
+2025-03-28 14:11:37,944 - werkzeug - INFO - 127.0.0.1 - - [28/Mar/2025 14:11:37] "OPTIONS /extract-meeting HTTP/1.1" 200 -
+2025-03-28 14:11:37,946 - meeting - INFO - Starting meeting extraction process
+2025-03-28 14:11:37,946 - meeting - INFO - Calling Ollama model for meeting extraction
+2025-03-28 14:11:48,772 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-28 14:11:48,773 - meeting - INFO - LLM extraction successful - Title: 'Project Updates', Date: 'Tuesday, 2025-03-30', Time: '14:00:00'
+2025-03-28 14:11:48,773 - meeting - WARNING - No valid meeting detected or confidence too low
+2025-03-28 14:11:48,773 - werkzeug - INFO - 127.0.0.1 - - [28/Mar/2025 14:11:48] "[31m[1mPOST /extract-meeting HTTP/1.1[0m" 400 -
+2025-03-28 14:11:50,192 - werkzeug - INFO - 127.0.0.1 - - [28/Mar/2025 14:11:50] "OPTIONS /extract-meeting HTTP/1.1" 200 -
+2025-03-28 14:11:50,194 - meeting - INFO - Starting meeting extraction process
+2025-03-28 14:11:50,194 - meeting - INFO - Calling Ollama model for meeting extraction
+2025-03-28 14:11:59,979 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-28 14:11:59,980 - meeting - INFO - LLM extraction successful - Title: 'Meeting', Date: 'Mon, 2025-03-30', Time: '14:00:00'
+2025-03-28 14:11:59,980 - meeting - INFO - Meeting extraction completed successfully
+2025-03-28 14:11:59,981 - werkzeug - INFO - 127.0.0.1 - - [28/Mar/2025 14:11:59] "POST /extract-meeting HTTP/1.1" 200 -
+2025-03-28 14:13:32,305 - werkzeug - INFO - 127.0.0.1 - - [28/Mar/2025 14:13:32] "[31m[1mGET /parse-resume HTTP/1.1[0m" 405 -
+2025-03-28 14:13:32,440 - werkzeug - INFO - 127.0.0.1 - - [28/Mar/2025 14:13:32] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
