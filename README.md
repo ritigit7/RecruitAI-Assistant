@@ -1,4 +1,3 @@
-```markdown
 # ResumeParser Pro - AI Resume Analysis & Meeting Scheduler
 
 ![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)
