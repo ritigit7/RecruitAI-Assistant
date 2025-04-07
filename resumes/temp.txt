@@ -1,0 +1,114 @@
+git log --name-status --pretty=format:"%h - %an, %ar : %s"
+c249741 - Ritik M, 2 days ago : update
+M       AI_Agent/Resume_AI_Agent/app2_try4.py
+
+3ab9bb1 - Ritik M, 2 days ago : resolve error using deepseek and make updated code file app2_try4.py
+A       AI_Agent/Resume_AI_Agent/app2_try3.py
+A       AI_Agent/Resume_AI_Agent/app2_try4.py
+A       AI_Agent/Resume_AI_Agent/data/meetings.json
+A       AI_Agent/Resume_AI_Agent/data/resumes.json
+M       AI_Agent/temp.ipynb
+M       FineTune_Unsloth/fintune.ipynb
+
+c227458 - Ritik M, 6 days ago : json file in show2.sjon
+M       AI_Agent/Resume_AI_Agent/show2.json
+
+7a3e343 - Ritik M, 6 days ago : update the app2_try2.py flie for calender view using claude ai
+M       AI_Agent/Resume_AI_Agent/app2_try2.py
+A       AI_Agent/Resume_AI_Agent/meetings.json
+M       AI_Agent/temp.ipynb
+
+f88f15d - Ritik M, 6 days ago : app2_try2.py code update for calendar
+A       AI_Agent/Resume_AI_Agent/app2_try2.py
+M       AI_Agent/agent.ipynb
+M       AI_Agent/temp.ipynb
+
+e4aa90b - Ritik M, 7 days ago : updated app2_try1.py code
+M       AI_Agent/Resume_AI_Agent/app2_try1.py
+M       AI_Agent/temp.ipynb
+
+5c4d47e - Ritik M, 8 days ago : update code in app2_try1.py for changing the embedding
+M       AI_Agent/Meeting_agent/Meeting_AI_Agent.py
+M       AI_Agent/Resume_AI_Agent/Resume_AI_Agent_cloude.ipynb
+M       AI_Agent/Resume_AI_Agent/app2_try1.py
+R100    AI_Agent/Resume_AI_Agent/temp.txt       AI_Agent/Resume_AI_Agent/resumes/temp.txt
+M       AI_Agent/Resume_AI_Agent/try1.ipynb
+M       AI_Agent/temp.ipynb
+D       n8n_ai_agent_make/ai_agents/ai_task.py
+D       n8n_ai_agent_make/ai_agents/base.py
+D       n8n_ai_agent_make/ai_agents/openai_agent.py
+D       n8n_ai_agent_make/config.py
+D       n8n_ai_agent_make/main.py
+D       n8n_ai_agent_make/models/base.py
+D       n8n_ai_agent_make/models/execution.py
+D       n8n_ai_agent_make/models/workflow.py
+D       n8n_ai_agent_make/tasks/base.py
+D       n8n_ai_agent_make/tasks/file.py
+D       n8n_ai_agent_make/tasks/http.py
+D       n8n_ai_agent_make/tasks/registry.py
+D       n8n_ai_agent_make/tasks/transform.py
+D       n8n_ai_agent_make/workflow_engine/engine.py
+D       n8n_ai_agent_make/workflow_engine/scheduler.py
+
+d1e44d6 - Ritik M, 10 days ago : the app2_try1.py is updated and give answer good
+M       AI_Agent/Resume_AI_Agent/Resume_AI_Agent.ipynb
+A       AI_Agent/Resume_AI_Agent/Resume_AI_Agent_RAG.ipynb
+D       AI_Agent/Resume_AI_Agent/Resume_AI_Agent_copy.ipynb
+A       AI_Agent/Resume_AI_Agent/app2_try1.py
+A       AI_Agent/Resume_AI_Agent/jsn.json
+A       AI_Agent/Resume_AI_Agent/show2.json
+A       AI_Agent/Resume_AI_Agent/show2.txt
+R070    LangChain/try1.ipynb    AI_Agent/Resume_AI_Agent/try1.ipynb
+A       LangChain/parsed_resume.json
+A       LangChain/resume_details.txt
+D       LangChain/show2.txt
+
+e8f11c8 - Ritik M, 2 weeks ago : adding langgraph files and resume ai - try1.ipynb file
+M       AI_Agent/Resume_AI_Agent/Resume_AI_Agent.ipynb
+A       AI_Agent/Resume_AI_Agent/Resume_AI_Agent_cloude.ipynb
+A       AI_Agent/Resume_AI_Agent/Resume_AI_Agent_copy.ipynb
+A       GenAI/LLaMa/temp.ipynb
+A       LangChain/langgraph_swarm.ipynb
+A       LangChain/show.txt
+A       LangChain/show2.txt
+A       LangChain/temp.ipynb
+A       LangChain/temp.txt
+A       LangChain/try1.ipynb
+A       n8n_ai_agent_make/ai_agents/ai_task.py
+A       n8n_ai_agent_make/ai_agents/base.py
+A       n8n_ai_agent_make/ai_agents/openai_agent.py
+A       n8n_ai_agent_make/config.py
+A       n8n_ai_agent_make/main.py
+A       n8n_ai_agent_make/models/base.py
+A       n8n_ai_agent_make/models/execution.py
+A       n8n_ai_agent_make/models/workflow.py
+A       n8n_ai_agent_make/tasks/base.py
+A       n8n_ai_agent_make/tasks/file.py
+A       n8n_ai_agent_make/tasks/http.py
+A       n8n_ai_agent_make/tasks/registry.py
+A       n8n_ai_agent_make/tasks/transform.py
+A       n8n_ai_agent_make/workflow_engine/engine.py
+A       n8n_ai_agent_make/workflow_engine/scheduler.py
+
+284303d - Ritik M, 3 weeks ago : try other way to get better result
+A       AI_Agent/Resume_AI_Agent/Resume_AI_Agent.ipynb
+A       AI_Agent/Resume_AI_Agent/app.py
+A       AI_Agent/Resume_AI_Agent/temp.txt
+M       AI_Agent/temp.ipynb
+A       Resume_project/cvs_annotation_test_copy.json
+M       Resume_project/temp.ipynb
+M       Resume_project/text_extract.ipynb
+
+baebbe5 - Ritik M, 4 weeks ago : ai agent
+A       AI_Agent/Event_agent.ipynb
+A       AI_Agent/Meeting_agent/Meeting_AI_Agent.ipynb
+A       AI_Agent/Meeting_agent/Meeting_AI_Agent.py
+A       AI_Agent/Meeting_agent/app.py
+A       AI_Agent/Meeting_agent/temp.py
+A       AI_Agent/agent.ipynb
+A       AI_Agent/app.py
+A       AI_Agent/sql.db
+A       AI_Agent/sql.sql
+A       AI_Agent/temp.ipynb
+
+ec6c0b1 - Ritik M, 4 weeks ago : initial commit for back up

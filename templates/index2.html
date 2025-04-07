@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume AI Agent</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-light: #eef2ff;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --dark-color: #2b2d42;
+            --light-color: #ffffff;
+            --gray-light: #f8f9fa;
+            --gray-medium: #e9ecef;
+            --gray-dark: #6c757d;
+            --success-color: #4ad66d;
+            --danger-color: #f72585;
+            --warning-color: #ff9e00;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--gray-light);
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: var(--light-color);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            padding: 0.8rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand i {
+            font-size: 1.8rem;
+            margin-right: 0.5rem;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            color: var(--dark-color);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: var(--light-color);
+            border-bottom: 1px solid var(--gray-medium);
+            font-weight: 600;
+            padding: 1.25rem 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            font-weight: 500;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background-color: #3ac05d;
+            border-color: #3ac05d;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+            font-size: 1.5rem;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .resume-section {
+            background-color: var(--light-color);
+            padding: 1.75rem;
+            border-radius: 12px;
+            margin-bottom: 1.75rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .tab-content {
+            padding: 1.5rem 0;
+        }
+
+        .nav-tabs {
+            border-bottom: 2px solid var(--gray-medium);
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: var(--gray-dark);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0;
+            position: relative;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            font-weight: 600;
+            background-color: transparent;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .nav-tabs .nav-link:hover:not(.active) {
+            color: var(--primary-color);
+            border-color: transparent;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+            background-color: var(--gray-medium);
+        }
+
+        .progress-bar {
+            background-color: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        #resumePreview {
+            min-height: 500px;
+            border: 2px dashed var(--gray-medium);
+            border-radius: 12px;
+            padding: 1.5rem;
+            background-color: var(--light-color);
+            transition: all 0.3s ease;
+        }
+
+        #resumePreview:hover {
+            border-color: var(--primary-color);
+        }
+
+        .meeting-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .meeting-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .meeting-time {
+            font-size: 0.9rem;
+            color: var(--gray-dark);
+            display: flex;
+            align-items: center;
+        }
+
+        .meeting-participants {
+            font-size: 0.85rem;
+            color: var(--gray-dark);
+            display: flex;
+            align-items: center;
+        }
+
+        .skill-badge {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            margin: 0.25rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50rem;
+            font-size: 0.85rem;
+            display: inline-block;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .skill-badge:hover {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            transform: translateY(-2px);
+        }
+
+        .experience-item {
+            border-left: 3px solid var(--primary-color);
+            padding-left: 1.25rem;
+            margin-bottom: 1.75rem;
+            position: relative;
+        }
+
+        .experience-item:before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+
+        .experience-company {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .experience-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .experience-duration {
+            font-size: 0.9rem;
+            color: var(--gray-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .education-item {
+            margin-bottom: 1.75rem;
+            padding-left: 1.25rem;
+            border-left: 3px solid var(--accent-color);
+            position: relative;
+        }
+
+        .education-item:before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+        }
+
+        .education-degree {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .education-institution {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .education-duration {
+            font-size: 0.9rem;
+            color: var(--gray-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .spinner-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: var(--primary-color);
+        }
+
+        .toast {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 9999;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        #fileDropArea {
+            border: 2px dashed var(--gray-medium);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            background-color: var(--light-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #fileDropArea:hover {
+            border-color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+
+        #fileDropArea.highlight {
+            border-color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+
+        #fileDropArea i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        #resumeOutput {
+            display: none;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-size: 1.75rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            text-align: center;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h4 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .feature-card p {
+            color: var(--gray-dark);
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-light) 0%, #ffffff 100%);
+            padding: 4rem 0;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 3rem;
+        }
+
+        .hero-title {
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-subtitle {
+            color: var(--gray-dark);
+            margin-bottom: 2rem;
+            font-size: 1.25rem;
+        }
+
+        .hero-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .floating-action-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(67, 97, 238, 0.3);
+            z-index: 99;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .floating-action-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-5px) scale(1.1);
+        }
+
+       /* Calendar View Styles */
+        #calendar {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .fc {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .fc-toolbar-title {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .fc-button {
+            background-color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .fc-button:hover {
+            background-color: var(--secondary-color) !important;
+            border-color: var(--secondary-color) !important;
+        }
+
+        .fc-button-primary:not(:disabled).fc-button-active {
+            background-color: var(--secondary-color) !important;
+            border-color: var(--secondary-color) !important;
+        }
+
+        .fc-event {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white !important; /* Add this line to make text white */
+        }
+
+        .fc-event:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .fc-daygrid-event-dot {
+            border-color: var(--light-color) !important;
+        }
+
+        .fc-daygrid-day-number {
+            color: var(--dark-color);
+        }
+
+        .fc-col-header-cell-cushion {
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+
+        .fc-day-today {
+            background-color: var(--primary-light) !important;
+        }
+
+        /* Meeting Modal Styles */
+        .meeting-modal .modal-header {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .meeting-modal .modal-title {
+            font-weight: 600;
+        }
+
+        .meeting-modal .modal-body {
+            padding: 2rem;
+        }
+
+        .meeting-detail {
+            margin-bottom: 1rem;
+        }
+
+        .meeting-detail-label {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Modern Card Styles */
+        .modern-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .modern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .modern-card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modern-card-body {
+            padding: 1.5rem;
+        }
+
+        /* Gradient Backgrounds */
+        .gradient-bg-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+        }
+
+        .gradient-bg-accent {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #3a86ff 100%);
+            color: white;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .nav-tabs .nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .card-header {
+                padding: 1rem;
+            }
+
+            .hero-section {
+                padding: 2rem 0;
+                text-align: center;
+            }
+
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            #fileDropArea {
+                padding: 2rem 1rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+
+            .fc-toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .fc-toolbar-chunk {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        /* Animation Enhancements */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-light);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-robot"></i>Resume AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#resumeSection">Resume</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#meetingSection">Meetings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#calendarSection">Calendar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#historySection">History</a>
+                    </li>
+                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                        <a class="btn btn-outline-primary" href="#">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Sign In
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="hero-title">Transform Your Resume with AI</h1>
+                    <p class="hero-subtitle">Upload, analyze, and enhance your resume with our powerful AI tools. Get personalized suggestions and schedule interviews effortlessly.</p>
+                    <div class="d-flex gap-2">
+                        <a href="#resumeSection" class="btn btn-primary btn-lg">
+                            <i class="bi bi-upload me-2"></i>Upload Resume
+                        </a>
+                        <a href="#calendarSection" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-calendar3 me-2"></i>View Calendar
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="AI Resume Analysis" class="hero-image animate-fade-in">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container mb-5">
+        <!-- Features Section -->
+        <section class="mb-5">
+            <div class="row text-center mb-4">
+                <div class="col-12">
+                    <h2 class="section-title">How It Works</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-upload"></i>
+                        </div>
+                        <h4>Upload Resume</h4>
+                        <p>Simply upload your resume in PDF or DOCX format. Our AI will analyze and extract all relevant information.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-magic"></i>
+                        </div>
+                        <h4>AI Analysis</h4>
+                        <p>Our advanced algorithms parse your resume, identifying key skills, experiences, and areas for improvement.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+                        <h4>Schedule Meetings</h4>
+                        <p>Directly schedule interviews or meetings with potential employers through our integrated system.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Resume Parser Section -->
+                <section id="resumeSection" class="mb-5">
+                    <div class="card modern-card">
+                        <div class="modern-card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i>Resume Parser</h5>
+                            <button id="generatePdfBtn" class="btn btn-light btn-sm" disabled>
+                                <i class="bi bi-file-earmark-pdf me-1"></i>Generate PDF
+                            </button>
+                        </div>
+                        <div class="modern-card-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div id="fileDropArea">
+                                        <i class="bi bi-cloud-arrow-up"></i>
+                                        <h5>Upload Your Resume</h5>
+                                        <p class="text-muted">Drag & drop your resume file here or click to browse</p>
+                                        <p class="small text-muted">Supported formats: PDF, DOCX</p>
+                                        <input type="file" id="resumeFile" class="d-none" accept=".pdf,.docx">
+                                        <button class="btn btn-outline-primary mt-2" id="browseBtn">
+                                            <i class="bi bi-folder2-open me-1"></i>Browse Files
+                                        </button>
+                                    </div>
+
+                                    <div id="uploadProgress" class="mt-3" style="display: none;">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Processing Resume...</span>
+                                            <span id="progressPercent">0%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div id="progressBar" class="progress-bar" role="progressbar"
+                                                style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div id="resumePreview">
+                                        <div class="text-center text-muted py-5">
+                                            <i class="bi bi-file-text fs-1"></i>
+                                            <p class="mt-2">Parsed resume will appear here</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="resumeOutput" class="mt-4">
+                                <ul class="nav nav-tabs" id="resumeTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="summary-tab" data-bs-toggle="tab"
+                                            data-bs-target="#summary" type="button">Summary</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="experience-tab" data-bs-toggle="tab"
+                                            data-bs-target="#experience" type="button">Experience</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="education-tab" data-bs-toggle="tab"
+                                            data-bs-target="#education" type="button">Education</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="skills-tab" data-bs-toggle="tab"
+                                            data-bs-target="#skills" type="button">Skills</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="projects-tab" data-bs-toggle="tab"
+                                            data-bs-target="#projects" type="button">Projects</button>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content" id="resumeTabContent">
+                                    <div class="tab-pane fade show active" id="summary" role="tabpanel">
+                                        <div id="personalDetailsContainer"></div>
+                                        <div id="professionalSummaryContainer" class="mt-4"></div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="experience" role="tabpanel">
+                                        <div id="experienceContainer"></div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="education" role="tabpanel">
+                                        <div id="educationContainer"></div>
+                                        <div id="certificationsContainer" class="mt-4"></div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="skills" role="tabpanel">
+                                        <div id="skillsContainer"></div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="projects" role="tabpanel">
+                                        <div id="projectsContainer"></div>
+                                        <div id="achievementsContainer" class="mt-4"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Meeting Scheduler Section -->
+                <section id="meetingSection" class="mb-5">
+                    <div class="card modern-card">
+                        <div class="modern-card-header">
+                            <h5 class="mb-0"><i class="bi bi-calendar-event me-2"></i>Meeting Scheduler</h5>
+                        </div>
+                        <div class="modern-card-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="meetingText" class="form-label">Describe your meeting:</label>
+                                        <textarea class="form-control" id="meetingText" rows="5"
+                                            placeholder="Example: Schedule a team meeting tomorrow at 2pm for 1 hour about the project deadline. Participants: John, Sarah, Mike. Location: Google Meet."></textarea>
+                                    </div>
+                                    <button id="scheduleMeetingBtn" class="btn btn-primary">
+                                        <i class="bi bi-calendar-plus me-1"></i>Schedule Meeting
+                                    </button>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div id="meetingPreview" class="p-4 bg-light rounded">
+                                        <div class="text-center text-muted py-4">
+                                            <i class="bi bi-calendar-event fs-1"></i>
+                                            <p class="mt-2">Meeting details will appear here</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Calendar View Section -->
+                <section id="calendarSection" class="mb-5">
+                    <div class="card modern-card">
+                        <div class="modern-card-header">
+                            <h5 class="mb-0"><i class="bi bi-calendar-date me-2"></i>Calendar View</h5>
+                        </div>
+                        <div class="modern-card-body">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- History Section -->
+                <section id="historySection">
+                    <div class="card modern-card">
+                        <div class="modern-card-header">
+                            <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>History</h5>
+                        </div>
+                        <div class="modern-card-body">
+                            <ul class="nav nav-tabs" id="historyTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="meetings-tab" data-bs-toggle="tab"
+                                        data-bs-target="#meetings" type="button">Meetings</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="resumes-tab" data-bs-toggle="tab"
+                                        data-bs-target="#resumes" type="button">Resumes</button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content mt-3" id="historyTabContent">
+                                <div class="tab-pane fade show active" id="meetings" role="tabpanel">
+                                    <div id="meetingsContainer" class="row">
+                                        <div class="col-12 text-center py-5">
+                                            <div class="spinner-container">
+                                                <div class="spinner-border" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="resumes" role="tabpanel">
+                                    <div id="resumesContainer">
+                                        <div class="col-12 text-center py-5">
+                                            <div class="spinner-container">
+                                                <div class="spinner-border" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meeting Details Modal -->
+    <div class="modal fade meeting-modal" id="meetingDetailsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="meetingModalTitle">Meeting Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="meeting-detail">
+                        <p class="meeting-detail-label"><i class="bi bi-calendar-event me-2"></i>Date & Time</p>
+                        <p id="meetingDateTime"></p>
+                    </div>
+                    <div class="meeting-detail">
+                        <p class="meeting-detail-label"><i class="bi bi-info-circle me-2"></i>Description</p>
+                        <p id="meetingDescription"></p>
+                    </div>
+                    <div class="meeting-detail">
+                        <p class="meeting-detail-label"><i class="bi bi-geo-alt me-2"></i>Location</p>
+                        <p id="meetingLocation"></p>
+                    </div>
+                    <div class="meeting-detail">
+                        <p class="meeting-detail-label"><i class="bi bi-people me-2"></i>Participants</p>
+                        <p id="meetingParticipants"></p>
+                    </div>
+                    <div class="meeting-detail">
+                        <p class="meeting-detail-label"><i class="bi bi-card-text me-2"></i>Notes</p>
+                        <p id="meetingNotes"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a id="calendarLinkBtn" href="#" class="btn btn-primary" target="_blank">
+                        <i class="bi bi-calendar-plus me-1"></i>Add to Calendar
+                    </a>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="floating-action-btn" data-bs-toggle="tooltip" data-bs-placement="left" title="Need help?">
+        <i class="bi bi-question-lg"></i>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <strong class="me-auto">Success</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Operation completed successfully!
+            </div>
+        </div>
+
+        <div id="errorToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-danger text-white">
+                <strong class="me-auto">Error</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                An error occurred. Please try again.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script>
+        // DOM Elements
+        const fileDropArea = document.getElementById('fileDropArea');
+        const resumeFileInput = document.getElementById('resumeFile');
+        const browseBtn = document.getElementById('browseBtn');
+        const uploadProgress = document.getElementById('uploadProgress');
+        const progressBar = document.getElementById('progressBar');
+        const progressPercent = document.getElementById('progressPercent');
+        const resumePreview = document.getElementById('resumePreview');        const resumeOutput = document.getElementById('resumeOutput');
+        const generatePdfBtn = document.getElementById('generatePdfBtn');
+        const scheduleMeetingBtn = document.getElementById('scheduleMeetingBtn');
+        const meetingText = document.getElementById('meetingText');
+        const meetingPreview = document.getElementById('meetingPreview');
+        const meetingsContainer = document.getElementById('meetingsContainer');
+        const resumesContainer = document.getElementById('resumesContainer');
+        const successToast = new bootstrap.Toast(document.getElementById('successToast'));
+        const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+        const meetingDetailsModal = new bootstrap.Modal(document.getElementById('meetingDetailsModal'));
+        const calendarEl = document.getElementById('calendar');
+
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Initialize Calendar
+        let calendar;
+        if (calendarEl) {
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: [],
+                eventClick: function(info) {
+                    showMeetingDetails(info.event);
+                },
+                eventDidMount: function(info) {
+                    // Add tooltip to events
+                    info.el.setAttribute('data-bs-toggle', 'tooltip');
+                    info.el.setAttribute('title', info.event.title);
+                    new bootstrap.Tooltip(info.el);
+                }
+            });
+            calendar.render();
+        }
+
+        // Event Listeners
+        browseBtn.addEventListener('click', () => resumeFileInput.click());
+        resumeFileInput.addEventListener('change', handleFileSelect);
+        fileDropArea.addEventListener('dragover', handleDragOver);
+        fileDropArea.addEventListener('dragleave', handleDragLeave);
+        fileDropArea.addEventListener('drop', handleDrop);
+        generatePdfBtn.addEventListener('click', generatePdf);
+        scheduleMeetingBtn.addEventListener('click', scheduleMeeting);
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMeetingHistory();
+            loadResumeHistory();
+            loadCalendarEvents();
+        });
+
+        // File Handling Functions
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            fileDropArea.classList.add('highlight');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            fileDropArea.classList.remove('highlight');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            fileDropArea.classList.remove('highlight');
+
+            if (e.dataTransfer.files.length) {
+                resumeFileInput.files = e.dataTransfer.files;
+                handleFileSelect();
+            }
+        }
+
+        function handleFileSelect() {
+            const file = resumeFileInput.files[0];
+            if (!file) return;
+
+            const validTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            if (!validTypes.includes(file.type)) {
+                showError('Please upload a PDF or DOCX file');
+                return;
+            }
+
+            // Show processing UI
+            fileDropArea.innerHTML = `
+                <i class="bi bi-file-earmark-text"></i>
+                <h5>${file.name}</h5>
+                <p class="text-muted">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+            `;
+
+            uploadProgress.style.display = 'block';
+            simulateProgress();
+            // Process the file
+            processResumeFile(file);
+        }
+        
+        function simulateProgress() {
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                }
+                progressBar.style.width = `${progress}%`;
+                progressPercent.textContent = `${Math.floor(progress)}%`;
+            }, 200);
+        }
+        
+        function processResumeFile(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('/parse_resume', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    displayResumeData(data);
+                    setTimeout(() => {
+                        previewResumeData();
+                    }, 5000);
+                    generatePdfBtn.disabled = false;
+                    showSuccess('Resume parsed successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    resetFileUpload();
+                    showError(error.message || 'Failed to parse resume');
+                })
+                .finally(() => {
+                    uploadProgress.style.display = 'none';
+                    progressBar.style.width = '0%';
+                    progressPercent.textContent = '0%';
+                });
+        }
+
+        function resetFileUpload() {
+            fileDropArea.innerHTML = `
+                <i class="bi bi-cloud-arrow-up"></i>
+                <h5>Upload Your Resume</h5>
+                <p class="text-muted">Drag & drop your resume file here or click to browse</p>
+                <p class="small text-muted">Supported formats: PDF, DOCX</p>
+                <button class="btn btn-outline-primary mt-2" id="browseBtn">
+                    <i class="bi bi-folder2-open me-1"></i>Browse Files
+                </button>
+            `;
+            document.getElementById('browseBtn').addEventListener('click', () => resumeFileInput.click());
+        }
+
+        function previewResumeData() {
+            resumePreview.innerHTML = `
+            <div class="text-center">
+                <h5>Resume Preview</h5>
+                <embed src="../resumes/professional_resume.pdf" type="application/pdf" width="100%" height="500px" />
+                <p class="text-muted">If the preview is not visible, please ensure the file is a valid PDF and the file path is correct.</p>
+            </div>
+            `;
+        }
+
+        // Resume Display Functions
+        function displayResumeData(data) {
+            resumeOutput.style.display = 'block';
+
+            // Display personal details
+            if (data['Personal_Details']) {
+                const pd = data['Personal_Details'];
+                document.getElementById('personalDetailsContainer').innerHTML = `
+                    <div class="resume-section">
+                        <h4 class="section-title">Personal Details</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Full Name:</strong> ${pd.Full_Name || 'Not specified'}</p>
+                                <p><strong>Email:</strong> ${pd.Email_Address || 'Not specified'}</p>
+                                <p><strong>Phone:</strong> ${pd.Phone_Number || 'Not specified'}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>LinkedIn:</strong> ${pd.LinkedIn_Profile ? `<a href="${pd.LinkedIn_Profile}" target="_blank">${pd.LinkedIn_Profile}</a>` : 'Not specified'}</p>
+                                <p><strong>GitHub:</strong> ${pd.GitHub_Profile ? `<a href="${pd.GitHub_Profile}" target="_blank">${pd.GitHub_Profile}</a>` : 'Not specified'}</p>
+                                <p><strong>Portfolio:</strong> ${pd.Portfolio_Website ? `<a href="${pd.Portfolio_Website}" target="_blank">${pd.Portfolio_Website}</a>` : 'Not specified'}</p>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <p><strong>Address:</strong> ${[pd.Address, pd.City, pd.State, pd.Country, pd.Pincode].filter(Boolean).join(', ') || 'Not specified'}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Display professional summary
+            if (data['Professional_Summary']) {
+                const ps = data['Professional_Summary'];
+                document.getElementById('professionalSummaryContainer').innerHTML = `
+                    <div class="resume-section">
+                        <h4 class="section-title">Professional Summary</h4>
+                        <p>${ps.Summary || 'No professional summary provided'}</p>
+                        ${ps.Objective ? `<p><strong>Objective:</strong> ${ps.Objective}</p>` : ''}
+                        ${ps.Years_of_Experience ? `<p><strong>Years of Experience:</strong> ${ps.Years_of_Experience}</p>` : ''}
+                        ${ps.Industry_Focus ? `<p><strong>Industry Focus:</strong> ${ps.Industry_Focus.join(', ')}</p>` : ''}
+                    </div>
+                `;
+            }
+
+            // Display work experience
+            if (data['Work_Experience'] && data['Work_Experience'].list_of_experience) {
+                const expContainer = document.getElementById('experienceContainer');
+                expContainer.innerHTML = '<div class="resume-section"><h4 class="section-title">Work Experience</h4></div>';
+
+                data['Work_Experience'].list_of_experience.forEach(exp => {
+                    expContainer.innerHTML += `
+                        <div class="experience-item">
+                            <h5 class="experience-company">${exp.company || 'Unknown Company'}</h5>
+                            <p class="experience-title">${exp.title || 'Unknown Position'}</p>
+                            <p class="experience-duration">${exp.duration || 'No dates specified'}</p>
+                            <p>${exp.location || 'Location not specified'}</p>
+                            ${exp.technologies_used && exp.technologies_used.length ?
+                            `<p><strong>Technologies:</strong> ${exp.technologies_used.join(', ')}</p>` : ''}
+                        </div>
+                    `;
+                });
+            }
+
+            // Display education
+            if (data['Education_Details'] && data['Education_Details'].list_of_education) {
+                const eduContainer = document.getElementById('educationContainer');
+                eduContainer.innerHTML = '<div class="resume-section"><h4 class="section-title">Education</h4></div>';
+
+                data['Education_Details'].list_of_education.forEach(edu => {
+                    eduContainer.innerHTML += `
+                        <div class="education-item">
+                            <h5 class="education-degree">${edu.degree || 'Unknown Degree'}</h5>
+                            <p class="education-institution">${edu.institution || 'Unknown Institution'}</p>
+                            <p class="education-duration">${edu.years || 'No dates specified'}</p>
+                            ${edu.specialization ? `<p><strong>Specialization:</strong> ${edu.specialization}</p>` : ''}
+                            ${edu.percentage ? `<p><strong>Grade/Score:</strong> ${edu.percentage}%</p>` : ''}
+                            ${edu.relevant_coursework && edu.relevant_coursework.length ?
+                            `<p><strong>Relevant Coursework:</strong> ${edu.relevant_coursework.join(', ')}</p>` : ''}
+                        </div>
+                    `;
+                });
+            }
+
+            // Display certifications
+            if (data['Certifications_Details'] && data['Certifications_Details'].list_of_certificates) {
+                const certContainer = document.getElementById('certificationsContainer');
+                certContainer.innerHTML = '<div class="resume-section"><h4 class="section-title">Certifications</h4></div>';
+
+                data['Certifications_Details'].list_of_certificates.forEach(cert => {
+                    certContainer.innerHTML += `
+                        <div class="mb-3">
+                            <h5>${cert.Certification_name || 'Unknown Certification'}</h5>
+                            <p>${cert.Issuing_organization || 'Unknown Organization'}</p>
+                            ${cert.Date_obtained ? `<p><strong>Date Obtained:</strong> ${cert.Date_obtained}</p>` : ''}
+                            ${cert.Expiration_date ? `<p><strong>Expiration Date:</strong> ${cert.Expiration_date}</p>` : ''}
+                        </div>
+                    `;
+                });
+            }
+
+            // Display skills
+            if (data['Skills_Details']) {
+                const skills = data['Skills_Details'];
+                document.getElementById('skillsContainer').innerHTML = `
+                    <div class="resume-section">
+                        <h4 class="section-title">Skills</h4>
+                        ${skills.Technical_skills && skills.Technical_skills.length ?
+                        `<div class="mb-4">
+                                <h5>Technical Skills</h5>
+                                <div>${skills.Technical_skills.map(skill => `<span class="skill-badge">${skill}</span>`).join('')}</div>
+                            </div>` : ''}
+                        ${skills.Programming_Languages && skills.Programming_Languages.length ?
+                        `<div class="mb-4">
+                                <h5>Programming Languages</h5>
+                                <div>${skills.Programming_Languages.map(lang => `<span class="skill-badge">${lang}</span>`).join('')}</div>
+                            </div>` : ''}
+                        ${skills.Frameworks_Libraries && skills.Frameworks_Libraries.length ?
+                        `<div class="mb-4">
+                                <h5>Frameworks & Libraries</h5>
+                                <div>${skills.Frameworks_Libraries.map(fw => `<span class="skill-badge">${fw}</span>`).join('')}</div>
+                            </div>` : ''}
+                        ${skills.Tools_Software && skills.Tools_Software.length ?
+                        `<div class="mb-4">
+                                <h5>Tools & Software</h5>
+                                <div>${skills.Tools_Software.map(tool => `<span class="skill-badge">${tool}</span>`).join('')}</div>
+                            </div>` : ''}
+                        ${skills.Soft_Skills && skills.Soft_Skills.length ?
+                        `<div class="mb-4">
+                                <h5>Soft Skills</h5>
+                                <div>${skills.Soft_Skills.map(skill => `<span class="skill-badge">${skill}</span>`).join('')}</div>
+                            </div>` : ''}
+                        ${skills.Languages && skills.Languages.length ?
+                        `<div>
+                                <h5>Languages</h5>
+                                <div>${skills.Languages.map(lang => `<span class="skill-badge">${lang}</span>`).join('')}</div>
+                            </div>` : ''}
+                    </div>
+                `;
+            }
+
+            // Display projects
+            if (data['Projects_Details'] && data['Projects_Details'].list_of_projects) {
+                const projContainer = document.getElementById('projectsContainer');
+                projContainer.innerHTML = '<div class="resume-section"><h4 class="section-title">Projects</h4></div>';
+
+                data['Projects_Details'].list_of_projects.forEach(proj => {
+                    projContainer.innerHTML += `
+                        <div class="mb-4">
+                            <h5>${proj.Project_name || 'Untitled Project'}</h5>
+                            <p>${proj.Project_description || 'No description provided'}</p>
+                            ${proj.Role ? `<p><strong>Role:</strong> ${proj.Role}</p>` : ''}
+                            ${proj.Duration ? `<p><strong>Duration:</strong> ${proj.Duration}</p>` : ''}
+                            ${proj.Technologies_used && proj.Technologies_used.length ?
+                            `<p><strong>Technologies Used:</strong> ${proj.Technologies_used.join(', ')}</p>` : ''}
+                            ${proj.URL ? `<p><strong>URL:</strong> <a href="${proj.URL}" target="_blank">${proj.URL}</a></p>` : ''}
+                            ${proj.Key_achievements && proj.Key_achievements.length ?
+                            `<div>
+                                    <strong>Key Achievements:</strong>
+                                    <ul>${proj.Key_achievements.map(ach => `<li>${ach}</li>`).join('')}</ul>
+                                </div>` : ''}
+                        </div>
+                    `;
+                });
+            }
+
+            // Display achievements
+            if (data['Achievements_Details'] && data['Achievements_Details'].list_of_achievements) {
+                const achContainer = document.getElementById('achievementsContainer');
+                achContainer.innerHTML = '<div class="resume-section"><h4 class="section-title">Achievements</h4></div>';
+
+                data['Achievements_Details'].list_of_achievements.forEach(ach => {
+                    achContainer.innerHTML += `
+                        <div class="mb-3">
+                            <h5>${ach.Achievement_description || 'Untitled Achievement'}</h5>
+                            ${ach.Date ? `<p><strong>Date:</strong> ${ach.Date}</p>` : ''}
+                            ${ach.Awarding_organization ? `<p><strong>Awarding Organization:</strong> ${ach.Awarding_organization}</p>` : ''}
+                            ${ach.Impact ? `<p><strong>Impact:</strong> ${ach.Impact}</p>` : ''}
+                        </div>
+                    `;
+                });
+            }
+
+            // Display additional information if available
+            if (data['Additional_Information']) {
+                const addInfo = data['Additional_Information'];
+                const sectionsToDisplay = [
+                    { title: 'Hobbies', data: addInfo.Hobbies },
+                    { title: 'Interests', data: addInfo.Interests },
+                    { title: 'Languages', data: addInfo.Languages }
+                ].filter(section => section.data && section.data.length);
+
+                if (sectionsToDisplay.length) {
+                    const additionalInfoHTML = sectionsToDisplay.map(section => `
+                        <div class="mb-3">
+                            <h5>${section.title}</h5>
+                            <div>${section.data.map(item => `<span class="skill-badge">${item}</span>`).join('')}</div>
+                        </div>
+                    `).join('');
+
+                    const lastSection = document.querySelector('.resume-section:last-child');
+                    if (lastSection) {
+                        lastSection.innerHTML += additionalInfoHTML;
+                    } else {
+                        document.getElementById('projectsContainer').innerHTML += `
+                            <div class="resume-section">
+                                <h4 class="section-title">Additional Information</h4>
+                                ${additionalInfoHTML}
+                            </div>
+                        `;
+                    }
+                }
+            }
+        }
+
+        // PDF Generation
+        function generatePdf() {
+            generatePdfBtn.disabled = true;
+            generatePdfBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+
+            fetch('/generate_resume_pdf', {
+                method: 'POST'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'professional_resume.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    showSuccess('PDF generated successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError(error.message || 'Failed to generate PDF');
+                })
+                .finally(() => {
+                    generatePdfBtn.disabled = false;
+                    generatePdfBtn.innerHTML = '<i class="bi bi-file-earmark-pdf me-1"></i>Generate PDF';
+                });
+        }
+
+        // Meeting Scheduling Functions
+        function scheduleMeeting() {
+            const text = meetingText.value.trim();
+            if (!text) {
+                showError('Please describe your meeting');
+                return;
+            }
+
+            scheduleMeetingBtn.disabled = true;
+            scheduleMeetingBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Scheduling...';
+
+            fetch('/schedule_meeting', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: text })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    displayMeetingPreview(data);
+                    showSuccess('Meeting scheduled successfully!');
+                    loadMeetingHistory();
+                    loadCalendarEvents();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError(error.message || 'Failed to schedule meeting');
+                })
+                .finally(() => {
+                    scheduleMeetingBtn.disabled = false;
+                    scheduleMeetingBtn.innerHTML = '<i class="bi bi-calendar-plus me-1"></i>Schedule Meeting';
+                });
+        }
+
+        function displayMeetingPreview(data) {
+            const startTime = new Date(data.datetime);
+            const endTime = new Date(startTime.getTime() + data.duration_of_meeting * 60 * 60 * 1000);
+
+            meetingPreview.innerHTML = `
+                <div class="card meeting-card">
+                    <div class="card-body">
+                        <h5 class="card-title">${data.title || 'Meeting'}</h5>
+                        <p class="card-text">${data.meeting_description || 'No description provided'}</p>
+                        <p class="meeting-time">
+                            <i class="bi bi-calendar-event me-1"></i>
+                            ${startTime.toLocaleDateString()}
+                            <span class="ms-2">
+                                <i class="bi bi-clock me-1"></i>
+                                ${startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - 
+                                ${endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                        </p>
+                        ${data.location ? `<p><i class="bi bi-geo-alt me-1"></i>${data.location}</p>` : ''}
+                        <p class="meeting-participants">
+                            <i class="bi bi-people me-1"></i>
+                            ${data.participants && data.participants.length ?
+                    data.participants.join(', ') : 'No participants listed'}
+                        </p>
+                        ${data.notes ? `<div class="alert alert-light mt-2">${data.notes}</div>` : ''}
+                        ${data.calendar_link ? `
+                            <div class="mt-3">
+                                <a href="${data.calendar_link}" class="btn btn-outline-primary btn-sm" target="_blank">
+                                    <i class="bi bi-calendar-plus me-1"></i>Add to Calendar
+                                </a>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Calendar Functions
+        function loadCalendarEvents() {
+            fetch('/get_meetings')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    updateCalendar(data);
+                })
+                .catch(error => {
+                    console.error('Error loading calendar events:', error);
+                });
+        }
+
+        function updateCalendar(meetings) {
+            if (!calendar) return;
+
+            const events = meetings.map(meeting => ({
+                title: meeting.title || 'Meeting',
+                start: meeting.start,
+                end: meeting.end,
+                extendedProps: {
+                    description: meeting.meeting_description,
+                    location: meeting.location,
+                    participants: meeting.participants,
+                    notes: meeting.notes,
+                    calendarLink: meeting.calendar_link
+                }
+            }));
+
+            calendar.removeAllEvents();
+            calendar.addEventSource(events);
+            calendar.refetchEvents();
+        }
+
+        function showMeetingDetails(event) {
+            const startTime = new Date(event.start);
+            const endTime = new Date(event.end);
+            
+            document.getElementById('meetingModalTitle').textContent = event.title;
+            document.getElementById('meetingDateTime').textContent = 
+                `${startTime.toLocaleDateString()} ${startTime.toLocaleTimeString()} - ${endTime.toLocaleTimeString()}`;
+            document.getElementById('meetingDescription').textContent = 
+                event.extendedProps.description || 'No description provided';
+            document.getElementById('meetingLocation').textContent = 
+                event.extendedProps.location || 'Location not specified';
+            document.getElementById('meetingParticipants').textContent = 
+                event.extendedProps.participants ? event.extendedProps.participants.join(', ') : 'No participants';
+            document.getElementById('meetingNotes').textContent = 
+                event.extendedProps.notes || 'No notes available';
+            
+            const calendarLinkBtn = document.getElementById('calendarLinkBtn');
+            if (event.extendedProps.calendarLink) {
+                calendarLinkBtn.href = event.extendedProps.calendarLink;
+                calendarLinkBtn.style.display = 'inline-block';
+            } else {
+                calendarLinkBtn.style.display = 'none';
+            }
+            
+            meetingDetailsModal.show();
+        }
+
+        // History Loading Functions
+        function loadMeetingHistory() {
+            fetch('/get_meetings')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    displayMeetingHistory(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    meetingsContainer.innerHTML = `
+                    <div class="col-12">
+                        <div class="alert alert-danger">Failed to load meeting history: ${error.message || 'Unknown error'}</div>
+                    </div>
+                `;
+                });
+        }
+
+        function displayMeetingHistory(meetings) {
+            if (!meetings || meetings.length === 0) {
+                meetingsContainer.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-calendar-x fs-1 text-muted"></i>
+                        <p class="mt-2">No meetings scheduled yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort meetings by date (newest first)
+            meetings.sort((a, b) => new Date(b.start) - new Date(a.start));
+
+            meetingsContainer.innerHTML = '';
+            meetings.forEach(meeting => {
+                const startTime = new Date(meeting.start);
+                const endTime = new Date(meeting.end);
+
+                meetingsContainer.innerHTML += `
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card meeting-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">${meeting.title || 'Meeting'}</h5>
+                                <p class="card-text small text-muted">${meeting.meeting_description || 'No description'}</p>
+                                <p class="meeting-time small">
+                                    <i class="bi bi-calendar-event me-1"></i>
+                                    ${startTime.toLocaleDateString()}
+                                    <span class="ms-2">
+                                        <i class="bi bi-clock me-1"></i>
+                                        ${startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </span>
+                                </p>
+                                ${meeting.location ? `<p class="small"><i class="bi bi-geo-alt me-1"></i>${meeting.location}</p>` : ''}
+                                <p class="meeting-participants small">
+                                    <i class="bi bi-people me-1"></i>
+                                    ${meeting.participants && meeting.participants.length ?
+                        meeting.participants.join(', ') : 'No participants'}
+                                </p>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0">
+                                <button class="btn btn-sm btn-outline-primary view-meeting-btn" data-meeting-id="${meeting.id}">
+                                    <i class="bi bi-eye me-1"></i>View Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Add event listeners to view buttons
+            document.querySelectorAll('.view-meeting-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const meetingId = this.getAttribute('data-meeting-id');
+                    // In a real app, you would fetch the meeting details by ID
+                    // For demo purposes, we'll just show the first meeting
+                    if (calendar) {
+                        const events = calendar.getEvents();
+                        if (events.length > 0) {
+                            showMeetingDetails(events[0]);
+                        }
+                    }
+                });
+            });
+        }
+
+        function loadResumeHistory() {
+            fetch('/get_last_resume')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    if (!data || Object.keys(data).length === 0) {
+                        resumesContainer.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-file-earmark-text fs-1 text-muted"></i>
+                    <p class="mt-2">No resume history available</p>
+                </div>
+                `;
+                        return;
+                    }
+                    resumesContainer.innerHTML = `
+                <div class="resume-section">
+                <h4 class="section-title">Last Uploaded Resume</h4>
+                <p><strong>Full Name:</strong> ${data.Full_Name || 'Not specified'}</p>
+                <p><strong>Email:</strong> ${data.Email_Address || 'Not specified'}</p>
+                <p><strong>Phone:</strong> ${data.Phone_Number || 'Not specified'}</p>
+                <p><strong>Address:</strong> ${[data.Address, data.City, data.State, data.Country, data.Pincode].filter(Boolean).join(', ') || 'Not specified'}</p>
+                </div>
+            `;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    resumesContainer.innerHTML = `
+                <div class="col-12">
+                <div class="alert alert-danger">Failed to load resume history: ${error.message || 'Unknown error'}</div>
+                </div>
+            `;
+                });
+        }
+
+        // Utility Functions
+        function showSuccess(message) {
+            const toastBody = document.querySelector('#successToast .toast-body');
+            toastBody.textContent = message;
+            successToast.show();
+        }
+
+        function showError(message) {
+            const toastBody = document.querySelector('#errorToast .toast-body');
+            toastBody.textContent = message;
+            errorToast.show();
+        }
+    </script>
+</body>
+</html>
