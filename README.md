@@ -2,7 +2,6 @@
 
 ![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B)
 ![Ollama](https://img.shields.io/badge/LLM-Ollama-7F7F7F)
 
 RecruiAI is a comprehensive AI-powered tool designed to streamline the recruitment process by:
