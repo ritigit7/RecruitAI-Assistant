@@ -1,231 +1,256 @@
-# RecruitAI - AI-Powered Resume Parser and Meeting Scheduler
+# RecruiAI - AI-Powered Recruitment Assistant
 
 ![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Ollama](https://img.shields.io/badge/LLM-Ollama-7F7F7F)
+![Flask](https://img.shields.io/badge/backend-Flask-red)
+![React](https://img.shields.io/badge/frontend-React-blue)
+![MongoDB](https://img.shields.io/badge/database-MongoDB-green)
 
-RecruitAI is a comprehensive AI-powered tool designed to streamline the recruitment process by:
+RecruiAI revolutionizes recruitment workflows by combining AI-powered resume parsing with intelligent meeting scheduling in a single, integrated platform.
 
-- Automatically parsing and extracting structured data from resumes
-- Scheduling and managing candidate meetings
-- Generating professional resume PDFs
-- Classifying resumes into relevant job categories
+## 🌟 Features
 
-The system uses advanced natural language processing, local LLMs, and a MongoDB backend, with a Flask-based REST API for seamless integration.
+### 📄 Smart Resume Processing
+- **Multi-format Support**: PDF, DOCX
+- **Resume Overview**:
+  - Personal details (name, contact info)
+  - Professional experience with timeline reconstruction
+  - Education history with institution recognition
+  - Skills matrix with proficiency estimation
+  - Project portfolio analysis
+- **AI Classification**: Automatic categorization by job role
+- **AI Interviewer Suggesion**: Suggest best interviewer according to Resume
+- **PDF Generation**: Professional commen template-based resume creation
 
----
+### 📅 Intelligent Scheduling
+- Natural language meeting request interpretation
+- Calendar integration capabilities
+- Automated participant notifications by mail
 
-## 🚀 Key Features
+### 📊 Recruitment Analytics
+- Candidate comparison dashboard
+- Skill gap analysis
+- Pipeline visualization
 
-### 📄 Resume Processing
-- Supports PDF and DOCX formats
-- Extracts:
-  - Personal Details
-  - Professional Summary
-  - Work Experience
-  - Education History
-  - Skills, Certifications, Projects, Achievements
-- Job category classification
-- Generates clean, professional PDF resumes
+## 🏗️ System Architecture
 
-### 📅 Meeting Management
-- Parses meeting details from natural language
-- Stores:
-  - Title, Date/Time, Duration, Participants, Location
-- Calendar integration-ready
+```mermaid
+graph TD
+    A[Frontend] -->|HTTP| B[Flask API]
+    B --> C[Ollama LLM]
+    B --> D[MongoDB]
+    B --> E[FAISS Vector DB]
+    C --> F[Resume Parser]
+    C --> G[Meeting Scheduler]
+    F --> H[PDF Generator]
+```
 
----
-
-## 🧠 Technical Architecture
-
-### Core Components
-- **Flask API**: REST interface for all functionalities
-- **Ollama LLM**: Local NLP processing with models like LLaMA 3.2 or Mistral
-- **MongoDB**: Resume and meeting data storage
-- **FAISS**: Efficient semantic search engine
-- **Pydantic**: Strict data validation and schema enforcement
-
-### Data Flow
-1. User uploads a resume
-2. Text is extracted and chunked
-3. FAISS searches relevant chunks per resume section
-4. LLM extracts structured info from chunks
-5. Data is validated and stored
-6. PDF resume is optionally generated
-
----
-
-## ⚙️ Installation
+## 🛠️ Installation Guide
 
 ### Prerequisites
 - Python 3.9+
-- MongoDB (local instance)
-- Ollama (local with `llama3.2` or `mistral`)
-- Required Python packages
+- Node.js 16+ (for frontend)
+- MongoDB 5.0+
+- Ollama (with at least 8GB VRAM)
 
-### Setup Steps
+### Backend Setup
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/yourusername/recruiAI.git
-cd recruitAI
+# Clone repository
+git clone https://github.com/ritigit7/RecruiAI.git
+cd RecruiAI/RecruitAI
 
-# 2. Install dependencies
+# Create and activate virtual environment
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
 
-# 3. Start MongoDB (ensure it's running locally)
+# Set up MongoDB (ensure service is running)
+sudo systemctl start mongod
 
-# 4. Pull & serve the LLM model with Ollama
+# Initialize Ollama
 ollama pull llama3.2
-ollama serve
+ollama serve &
 
-# 5. Run the Flask app
-python app.py
+# Launch backend
+python flask_api.py
 ```
 
----
-
-## 📡 API Endpoints
-
-### Resume Endpoints
-- `POST /parse_resume`: Upload and parse resume file
-- `GET /get_last_resume`: Fetch the last parsed resume
-- `POST /generate_resume_pdf`: Generate resume PDF
-- `GET /resumes/professional_resume.pdf`: Get generated resume PDF
-
-### Meeting Endpoints
-- `POST /schedule_meeting`: Extract meeting info from input text
-- `GET /get_meetings`: Retrieve all scheduled meetings
-
----
-
-## 🧪 Usage Examples
-
-### Parse a Resume
+### Frontend Setup
 
 ```bash
-curl -X POST -F "file=@resume.pdf" http://localhost:5000/parse_resume
+cd RecruitAI
+npm install
+npm run dev
 ```
 
-### Schedule a Meeting
+## 📡 API Documentation
 
-```bash
-curl -X POST -H "Content-Type: application/json" \
--d '{"text":"Schedule meeting with John Doe tomorrow at 2pm for 1 hour about backend position"}' \
-http://localhost:5000/schedule_meeting
-```
+### Base URL
+`http://localhost:5000/api/v1`
 
-### Get Last Resume
+### All Endpoints
 
-```bash
-curl http://localhost:5000/get_last_resume
-```
-
----
+| Endpoint                             | Method | Description                                  | Parameters                                  |
+|--------------------------------------|--------|----------------------------------------------|---------------------------------------------|
+| `/`                                  | GET    | Renders the index page                        | -                                           |
+| `/parse_resume`                      | POST   | Parses a resume file                          | `file`: Uploaded file (PDF or DOCX)         |
+| `/schedule_meeting`                   | POST   | Schedules a meeting based on provided text    | JSON: `{'text': '...'}`                       |
+| `/get_last_resume`                   | GET    | Retrieves the personal details of the last parsed resume | -                                           |
+| `/generate_person_resume/<resume_id>` | GET    | Generates a PDF for a specific resume ID     | `resume_id`: ID of the resume to generate  |
+| `/get_resumes`                       | GET    | Retrieves a list of all saved resumes        | -                                           |
+| `/get_meetings`                      | GET    | Retrieves a list of all saved meetings        | -                                           |
+| `/get_interviewers`                  | GET    | Retrieves a list of all interviewer data      | -                                           |
+| `/resumes/professional_resume.pdf`   | GET    | Views the generated professional resume PDF   | -                                           |
+| `/generate_resume_pdf`               | POST   | Generates and sends the professional resume PDF as a download | -                                           |
+| `/send-email`                        | POST   | Sends emails to specified recipients          | JSON: `{'recipients': [...], 'subject': '...', 'text': '...', 'html': '...'}` |
+| `/save_resume`                       | POST   | Generates and saves the resume PDF           | -                                           |
 
 ## 🧩 Configuration
 
-Configuration settings in `app.py`:
-- `UPLOAD_FOLDER`: Temporary file storage directory
-- MongoDB URI and database
-- Selected Ollama LLM model
-- Logging levels and targets
+Environment variables (`.env`):
 
----
-
-## 🧱 Data Models
-
-### Resume
-
-```python
-class PersonalDetails(BaseModel):
-    Full_Name: str
-    Email_Address: str
-    Phone_Number: Optional[str]
-    # ... other fields
-
-class ExperienceItem(BaseModel):
-    company: str
-    title: str
-    # ... other fields
+```ini
+MONGO_URI=mongodb://localhost:27017
+OLLAMA_MODEL=llama3.2
+UPLOAD_FOLDER=./uploads
+LOG_LEVEL=INFO
 ```
 
-### Meeting
+## 📂 Project Structure
 
-```python
-class MeetingInfo(BaseModel):
-    title: str
-    datetime: str
-    participants: List[str]
-    # ... other fields
+```
+RecruiAI/
+├── RecruitAI/              # Backend services
+│   ├── api/                # API routes
+│   ├── core/               # Business logic
+│   ├── models/             # Data models
+│   ├── services/           # External integrations
+│   ├── utils/              # Helper functions
+│   ├── tests/              # Unit tests
+│   └── flask_api.py        # App entry point
+├── src/                    # Frontend React app
+│   ├── public/             # Static assets
+│   ├── src/
+│   │   ├── components/     # UI components
+│   │   ├── pages/          # Application views
+│   │   ├── services/       # API clients
+│   │   └── styles/         # CSS modules
+│   └── vite.config.ts      # Build config
+├── docs/                   # Documentation
+└── scripts/                # Deployment scripts
+```
+## 📂 Project UI
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/1.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/2.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/3.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/4.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/5.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/6.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/7.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/8.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/9.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/10.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/11.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/12.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/13.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/14.png)
+![RecruitAI Screenshot](https://github.com/ritigit7/RecruitAI-Assistant/blob/main/Images/15.png)
+
+## 🧪 Example Usage
+
+### Parse Resume via CLI
+
+```bash
+curl -X POST -F "file=@john_doe_resume.pdf" \
+http://localhost:5000/api/v1/resumes
 ```
 
----
+Response:
+```json
+{
+  "_id": {
+    "$oid": "67eec59fa8b1ee4015ff526b"
+  },
+  "filename": "Varun Kumar.docx",
+  "parsed_data": {
+    "Personal_Details": {
+      "Full_Name": "Varunkumar",
+      "Email_Address": "varunkumar.work@gmail.com",
+      "Phone_Number": "+6016510507",
+      "City": "Plano",
+      "State": "TX",
+      "Country": "USA"
+    },
+    "Professional_Summary": {
+      "Summary": "Highly experienced software developer with over 8 years of experience in developing business-to-business and business-to-client applications using various architectures such as Two-tier, Three-tier, and N-tier. Skilled in Java, J2EE, and Spring technologies.",
+      "Years_of_Experience": 8,
+      "Industry_Focus": [
+        "Telecom",
+        "Finance",
+        "E-Commerce"
+      ]
+    },
+    "Skills_Details": {
+      "Programming_Languages": [
+        "Java",
+        "J2EE",
+        "JavaScript",
+        "HTML",
+        "CSS",
+        "SQL"
+      ],
+      "Frameworks_Libraries": [
+        "Spring",
+        "Angular JS"
+      ]
+    },
+    "Work_Experience": {
+      "list_of_experience": [
+        {
+          "company": "Varunkumar",
+          "title": "Full Stack Java Developer",
+          "duration": "Jan 2016 - May 2017"
+        },
+        {
+          "company": "Capital One",
+          "title": "Full Stack Java Developer",
+          "duration": "Jan 2016 - May 2017"
+        }
+      ]
+    }
+  }
+}
+```
 
-## 🧯 Error Handling
+### Schedule Meeting via API
 
-Robust error handling includes:
-- File format and input validation
-- LLM and FAISS failure management
-- MongoDB operation safety
-- Detailed logs for debugging
+```python
+import requests
 
----
+response = requests.post(
+    "http://localhost:5000/api/v1/meetings",
+    json={
+        "text": "Interview with Jane Smith for ML position next Tuesday 2-3pm"
+    }
+)
+print(response.json())
+```
 
-## 📜 Logging
+## 🤝 Contributing
 
-Logs are printed to console with timestamps and levels:
-
-- `INFO`: Normal operations
-- `WARNING`: Recoverable issues
-- `ERROR`: Critical failures
-
-Special loggers:
-- `ollama`: LLM activity
-- `resume`: Resume operations
-- `meeting`: Meeting scheduler
-- `streamlit`: (UI, if integrated)
-
----
-
-## ⚠️ Limitations
-
-- Requires local Ollama and MongoDB
-- Resume parsing accuracy depends on formatting
-- Meeting scheduling accuracy depends on NLP interpretation
-- Performance may vary on low-end systems
-
----
-
-## 🔮 Future Enhancements
-
-- User authentication system
-- Multi-file format support
-- Analytics dashboard
-- Calendar service integration (Google Calendar, Outlook)
-- Multilingual support
-
----
-
-## 📄 License
-
-[Specify license here, e.g., MIT, Apache 2.0]
-
----
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## 📬 Contact
 
-For queries or contributions:
-
-**[Your Name]**  
-Email: [your-email@example.com]  
-GitHub: [https://github.com/yourusername](https://github.com/yourusername)
+**Project Maintainer**: Ritik  
+**Email**: ritikm01092003@gmail.com  
+**GitHub**: [@ritigit7](https://github.com/ritigit7)
 ```
-
-Let me know if you'd like help:
-- Generating a `requirements.txt`
-- Creating a logo/banner
-- Writing a short project description for your GitHub repo page
-- Creating badges (build status, license, Python version)
-
-Just say the word!
