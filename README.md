@@ -1,4 +1,4 @@
-# RecruiAI - AI-Powered Recruitment Assistant
+# RecruitAI - AI-Powered Recruitment Assistant
 
 ![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -7,7 +7,7 @@
 ![React](https://img.shields.io/badge/frontend-React-blue)
 ![MongoDB](https://img.shields.io/badge/database-MongoDB-green)
 
-RecruiAI revolutionizes recruitment workflows by combining AI-powered resume parsing with intelligent meeting scheduling in a single, integrated platform.
+RecruitAI revolutionizes recruitment workflows by combining AI-powered resume parsing with intelligent meeting scheduling in a single, integrated platform.
 
 ## 🌟 Features
 
@@ -58,8 +58,8 @@ graph TD
 
 ```bash
 # Clone repository
-git clone https://github.com/ritigit7/RecruiAI.git
-cd RecruiAI/RecruitAI
+git clone https://github.com/ritigit7/RecruitAI-Assistant.git
+cd RecruitAI-Assistant/RecruitAI
 
 # Create and activate virtual environment
 python -m venv .venv
@@ -123,7 +123,7 @@ LOG_LEVEL=INFO
 ## 📂 Project Structure
 
 ```
-RecruiAI/
+RecruitAI/
 ├── RecruitAI/              # Backend services
 │   ├── api/                # API routes
 │   ├── core/               # Business logic
