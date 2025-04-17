@@ -73,7 +73,7 @@ export function PageLayout({ children, title }: PageLayoutProps) {
 
         {/* Footer */}
         <footer className="py-4 px-6 border-t border-gray-200 text-center text-sm text-neutral-gray">
-          <p>© 2025 ResumeFlow. All rights reserved.</p>
+          <p>© 2025 RecruitAI. All rights reserved.</p>
         </footer>
       </div>
     </div>

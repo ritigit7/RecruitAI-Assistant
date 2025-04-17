@@ -54,7 +54,7 @@ export function Sidebar() {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-5 border-b border-gray-200">
-            <h1 className="text-2xl font-bold text-blue-primary font-nunito">RecruiAI</h1>
+            <h1 className="text-2xl font-bold text-blue-primary font-nunito">RecruitAI</h1>
           </div>
 
           {/* Navigation */}
@@ -92,7 +92,7 @@ export function Sidebar() {
               </div>
               <div className="ml-3">
                 <p className="text-sm font-medium text-dark-gray">HR Manager</p>
-                <p className="text-xs text-neutral-gray">hr@company.com</p>
+                <p className="text-xs text-neutral-gray">hr@aether.co.in</p>
               </div>
             </div>
           </div>

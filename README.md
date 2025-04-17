@@ -1,10 +1,10 @@
-# RecruiAI - AI-Powered Resume Parser and Meeting Scheduler
+# RecruitAI - AI-Powered Resume Parser and Meeting Scheduler
 
 ![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Ollama](https://img.shields.io/badge/LLM-Ollama-7F7F7F)
 
-RecruiAI is a comprehensive AI-powered tool designed to streamline the recruitment process by:
+RecruitAI is a comprehensive AI-powered tool designed to streamline the recruitment process by:
 
 - Automatically parsing and extracting structured data from resumes
 - Scheduling and managing candidate meetings
@@ -68,7 +68,7 @@ The system uses advanced natural language processing, local LLMs, and a MongoDB 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/yourusername/recruiAI.git
-cd recruiAI
+cd recruitAI
 
 # 2. Install dependencies
 pip install -r requirements.txt

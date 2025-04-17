@@ -189,7 +189,7 @@ const InterviewScheduler: React.FC<InterviewSchedulerProps> = ({ extractedInfo }
           ${meetingResponse.calendar_link ? `<li style="margin-bottom: 10px;"><strong>Calendar Link:</strong> <a href="${meetingResponse.calendar_link}" style="color: #3498db; text-decoration: none;">${meetingResponse.calendar_link}</a></li>` : ''}
         </ul>
         <p style="margin-bottom: 20px;">${meetingResponse.meeting_description || description || ''}</p>
-        <p style="margin-top: 20px; font-weight: bold;">Best regards,<br/><strong>ResumeFlow Team</strong></p>
+        <p style="margin-top: 20px; font-weight: bold;">Best regards,<br/><strong>RecruitAI Team</strong></p>
       </div>
     `;
       const emailInterviewrText = `
@@ -204,7 +204,7 @@ const InterviewScheduler: React.FC<InterviewSchedulerProps> = ({ extractedInfo }
           ${meetingResponse.calendar_link ? `<li style="margin-bottom: 10px;"><strong>Calendar Link:</strong> <a href="${meetingResponse.calendar_link}" style="color: #3498db; text-decoration: none;">${meetingResponse.calendar_link}</a></li>` : ''}
         </ul>
         <p style="margin-bottom: 20px;">${meetingResponse.meeting_description || description || ''}</p>
-        <p style="margin-top: 20px; font-weight: bold;">Best regards,<br/><strong>ResumeFlow Team</strong></p>
+        <p style="margin-top: 20px; font-weight: bold;">Best regards,<br/><strong>RecruitAI Team</strong></p>
       </div>
       `;
 
