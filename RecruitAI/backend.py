@@ -59,15 +59,13 @@ streamlit_logger = logging.getLogger('streamlit')
 # ======================================================================================================
 
 ollama_client = OpenAI(
-    # base_url="http://localhost:11434/v1",
-    # api_key="ollama"
-    api_key=api_key
+    base_url="http://localhost:11434/v1",
+    api_key="ollama"
 )
 
 ollama_logger.info("Initializing Ollama client with base URL: http://localhost:11434/v1")
 
-# model = "llama3.2"
-model = "gpt-4o"
+model = "llama3.2"
 # model = "mistral"
 ollama_logger.info(f"Using model: {model}")
 
